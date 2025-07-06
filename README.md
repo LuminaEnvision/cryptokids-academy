@@ -200,21 +200,21 @@ cryptokids-academy/
 
 ## 🎯 Roadmap
 
-### Phase 1: MVP (Months 1-2)
+### Phase 1: MVP
 - [ ] User authentication and family management
 - [ ] Basic age-appropriate interfaces
 - [ ] Simple virtual wallet and trading simulator
 - [ ] Core gamification (badges, basic achievements)
 - [ ] Parent dashboard with progress tracking
 
-### Phase 2: Enhanced Learning (Months 3-4)
+### Phase 2: Enhanced Learning
 - [ ] Structured learning paths with lessons
 - [ ] Interactive educational content
 - [ ] Advanced trading features (limit orders, portfolio analysis)
 - [ ] Social features (family challenges, leaderboards)
 - [ ] Mobile responsive design
 
-### Phase 3: Scale & Monetization (Months 5-6)
+### Phase 3: Scale & Monetization
 - [ ] Subscription management and billing
 - [ ] School/institution admin portal
 - [ ] Advanced analytics and reporting
