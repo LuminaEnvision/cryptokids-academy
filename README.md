@@ -252,18 +252,7 @@ We're looking for developers passionate about education and blockchain technolog
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## 📧 Contact
-
-**Project Lead**: [Your Name]
-- Email: [your.email@domain.com]
-- LinkedIn: [your-linkedin]
-- Twitter: [@yourhandle]
-
 **Looking for collaborators!** If you're interested in joining this project, please reach out.
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ---
 
