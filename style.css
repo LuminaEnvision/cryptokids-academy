@@ -1,0 +1,22 @@
+body {
+  background-color: #f0f8ff;
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+.pet-image {
+  width: 200px;
+}
+button {
+  font-size: 18px;
+  padding: 10px 20px;
+  background-color: #34d399;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+button:hover {
+  transform: scale(1.1);
+}
+p {
+  font-size: 20px;
+}
