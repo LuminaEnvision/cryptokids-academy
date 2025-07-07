@@ -16,6 +16,9 @@ function initGame() {
     // Update balance display
     document.getElementById('balance').innerText = window.wallet.coins.toFixed(2);
 
+    // Story element
+    const storyElement = document.getElementById('story');
+
     // Card data
     const cards = [
       { id: 1, value: 'Coin', matched: false },
@@ -69,9 +72,18 @@ function initGame() {
         cards.find(c => c.id == card1.dataset.id).matched = true;
         cards.find(c => c.id == card2.dataset.id).matched = true;
         matchesFound++;
+        // Update story based on matched card
+        if (card1.dataset.value === 'Coin') {
+          storyElement.textContent = 'You matched Coins! Your dragon can save them!';
+        } else if (card1.dataset.value === 'Wallet') {
+          storyElement.textContent = 'You matched Wallets! Your dragon has a safe place for coins!';
+        } else if (card1.dataset.value === 'Send') {
+          storyElement.textContent = 'You matched Send! Your dragon can share coins!';
+        }
         if (matchesFound === 3) {
           window.wallet.coins += 0.05;
           document.getElementById('balance').innerText = window.wallet.coins.toFixed(2);
+          storyElement.textContent = 'Hooray! Your dragon found all treasures and earned 0.05 coins!';
           alert('You won! Earned 0.05 coins!');
         }
       } else {
