@@ -256,4 +256,9 @@ We're looking for developers passionate about education and blockchain technolog
 
 ---
 
+## 🖥️ Demo
+A frontend-only prototype for Little Traders (ages 7–10) is available at [Glitch](https://pattern-fuzzy-couch.glitch.me)
+
+)]. It simulates the pet, wallet, and games using HTML/CSS/JavaScript. Contributors can port to Next.js and add Sepolia testnet integration as per the tech stack.
+
 ⭐ **Star this repo** if you believe in teaching kids about the future of finance!
