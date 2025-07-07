@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+     <html lang="en">
+     <head>
+       <meta charset="UTF-8">
+       <title>CryptoKids Academy: Send Treasure</title>
+       <link rel="stylesheet" href="style.css">
+     </head>
+     <body>
+       <h1>Little Traders: Send Dragon Treasure</h1>
+       <p id="story">Send treasure to another dragon to make friends!</p>
+       <p>Your Coins: <span id="balance">0.5</span></p>
+       <div>
+         <label>Friend’s Pet Code:</label>
+         <input type="text" id="friendCode" placeholder="e.g., Dragon123">
+         <label>Coins to Send:</label>
+         <input type="number" id="coinAmount" value="0.01" min="0.01" max="0.5" step="0.01">
+         <button onclick="sendCoins()">Send Treasure</button>
+       </div>
+       <p><a href="index.html">Back to Pet</a> | <a href="game.html">Play Card Game</a></p>
+       <script src="script.js"></script>
+     </body>
+     </html>
