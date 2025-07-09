@@ -1,107 +1,91 @@
-// Simulated wallet for demo; replace with Sepolia testnet via Tatum/Moralis for real wallets
-window.wallet = window.wallet || { coins: 0.5 };
+window.wallet = { coins: 0.5 };
 
-// Feed Pet function for index.html
-function feedPet() {
-  if (document.getElementById('balance')) {
-    window.wallet.coins += 0.01;
-    document.getElementById('balance').innerText = window.wallet.coins.toFixed(2);
-    alert('Pet fed! Earned 0.01 coins!');
-  }
+function updateCoinDisplay() {
+  const coinDisplays = document.querySelectorAll('#coin-balance');
+  coinDisplays.forEach(display => {
+    if (display) display.textContent = window.wallet.coins.toFixed(2);
+  });
 }
 
-// Initialize game for game.html
-function initGame() {
-  if (document.getElementById('gameBoard')) {
-    // Update balance display
-    document.getElementById('balance').innerText = window.wallet.coins.toFixed(2);
+function showPopup() {
+  const popup = document.getElementById('age-popup');
+  if (popup) popup.style.display = 'block';
+}
 
-    // Story element
-    const storyElement = document.getElementById('story');
+function closePopup() {
+  const popup = document.getElementById('age-popup');
+  if (popup) popup.style.display = 'none';
+}
 
-    // Card data
-    const cards = [
-      { id: 1, value: 'Coin', matched: false },
-      { id: 2, value: 'Coin', matched: false },
-      { id: 3, value: 'Wallet', matched: false },
-      { id: 4, value: 'Wallet', matched: false },
-      { id: 5, value: 'Send', matched: false },
-      { id: 6, value: 'Send', matched: false }
-    ];
-    let flippedCards = [];
-    let matchesFound = 0;
+function feedPet() {
+  window.wallet.coins += 0.01;
+  updateCoinDisplay();
+  alert('Pet fed! Earned 0.01 coins!');
+}
 
-    // Shuffle cards
-    function shuffle(array) {
-      for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
+function flipCard(card, cards, pairs, storyElement) {
+  if (card.classList.contains('flipped') || card.classList.contains('matched')) return;
+  card.classList.add('flipped');
+  const flippedCards = cards.filter(c => c.classList.contains('flipped') && !c.classList.contains('matched'));
+  if (flippedCards.length === 2) {
+    const [card1, card2] = flippedCards;
+    if (card1.dataset.value === card2.dataset.value) {
+      card1.classList.add('matched');
+      card2.classList.add('matched');
+      window.wallet.coins += 0.05;
+      updateCoinDisplay();
+      storyElement.textContent = 'Your dragon found a matching treasure! Earned 0.05 coins!';
+      if (cards.every(c => c.classList.contains('matched'))) {
+        storyElement.textContent = 'All treasures matched! Your dragon is a blockchain hero!';
       }
-    }
-    shuffle(cards);
-
-    // Create game board
-    const gameBoard = document.getElementById('gameBoard');
-    cards.forEach(card => {
-      const cardElement = document.createElement('div');
-      cardElement.classList.add('card');
-      cardElement.dataset.value = card.value;
-      cardElement.dataset.id = card.id;
-      cardElement.addEventListener('click', () => flipCard(cardElement, card));
-      gameBoard.appendChild(cardElement);
-    });
-
-    // Flip card logic
-    function flipCard(cardElement, card) {
-      if (flippedCards.length < 2 && !card.matched && !flippedCards.includes(cardElement)) {
-        cardElement.classList.add('flipped');
-        cardElement.textContent = card.value;
-        flippedCards.push(cardElement);
-        if (flippedCards.length === 2) {
-          setTimeout(checkMatch, 1000);
-        }
-      }
-    }
-
-    // Check for match
-    function checkMatch() {
-      const [card1, card2] = flippedCards;
-      if (card1.dataset.value === card2.dataset.value) {
-        card1.classList.add('matched');
-        card2.classList.add('matched');
-        cards.find(c => c.id == card1.dataset.id).matched = true;
-        cards.find(c => c.id == card2.dataset.id).matched = true;
-        matchesFound++;
-        // Update story based on matched card
-        if (card1.dataset.value === 'Coin') {
-          storyElement.textContent = 'You matched Coins! Your dragon can save them!';
-        } else if (card1.dataset.value === 'Wallet') {
-          storyElement.textContent = 'You matched Wallets! Your dragon has a safe place for coins!';
-        } else if (card1.dataset.value === 'Send') {
-          storyElement.textContent = 'You matched Send! Your dragon can share coins!';
-        }
-        if (matchesFound === 3) {
-          window.wallet.coins += 0.05;
-          document.getElementById('balance').innerText = window.wallet.coins.toFixed(2);
-          storyElement.textContent = 'Hooray! Your dragon found all treasures and earned 0.05 coins!';
-          alert('You won! Earned 0.05 coins!');
-        }
-      } else {
+    } else {
+      setTimeout(() => {
         card1.classList.remove('flipped');
         card2.classList.remove('flipped');
-        card1.textContent = '';
-        card2.textContent = '';
-      }
-      flippedCards = [];
+      }, 1000);
     }
   }
 }
 
-// Initialize appropriate function based on page
+function sendTreasure() {
+  const amount = parseFloat(document.getElementById('amount').value);
+  const recipient = document.getElementById('recipient').value;
+  if (isNaN(amount) || amount <= 0 || amount > window.wallet.coins) {
+    alert('Invalid amount!');
+    return;
+  }
+  window.wallet.coins -= amount;
+  updateCoinDisplay();
+  document.getElementById('story').textContent = `Sent ${amount} coins to ${recipient}! Your dragon shared treasure on the blockchain!`;
+  document.getElementById('amount').value = '';
+  document.getElementById('recipient').value = '';
+}
+
 document.addEventListener('DOMContentLoaded', () => {
-  if (document.getElementById('gameBoard')) {
-    initGame();
-  } else if (document.getElementById('balance')) {
-    document.getElementById('balance').innerText = window.wallet.coins.toFixed(2);
+  updateCoinDisplay();
+  const cards = Array.from(document.querySelectorAll('.card'));
+  const storyElement = document.getElementById('story');
+  if (cards.length > 0 && storyElement) {
+    cards.forEach(card => card.addEventListener('click', () => flipCard(card, cards, ['Coin', 'Wallet', 'Send'], storyElement)));
+  }
+  const wallet = document.getElementById('wallet');
+  const coins = document.querySelectorAll('.coin');
+  if (wallet && coins.length > 0) {
+    wallet.addEventListener('dragover', e => e.preventDefault());
+    wallet.addEventListener('drop', () => {
+      const draggedCoin = document.querySelector('.coin[draggable="true"]');
+      if (draggedCoin) {
+        draggedCoin.remove();
+        window.wallet.coins += 0.02;
+        updateCoinDisplay();
+        document.getElementById('story').textContent = 'Your dragon stored the coin safely in its blockchain wallet!';
+        if (document.querySelectorAll('.coin').length === 0) {
+          document.getElementById('story').textContent = 'All coins stored! Your dragon is a wallet master!';
+        }
+      }
+    });
+    coins.forEach(coin => {
+      coin.addEventListener('dragstart', e => e.dataTransfer.setData('text/plain', 'coin'));
+    });
   }
 });

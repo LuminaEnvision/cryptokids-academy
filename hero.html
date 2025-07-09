@@ -7,18 +7,22 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <h1>Welcome to CryptoKids Academy!</h1>
-  <img src="https://cdn.pixabay.com/photo/2018/05/18/15/30/unicorn-icon-3411682_1280.png" alt="Dragon" class="pet-image">
-  <p id="story">Join the Dragon’s Crypto Quest! Earn coins, trade treasures, and learn blockchain with your dragon!</p>
-  <button onclick="showSignIn()">Start Your Quest</button>
-  <p><a href="signup.html" class="signup-link">New? Sign Up Here!</a></p>
-  <div id="signin-popup" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #f0f8ff; padding: 20px; border: 2px solid #15803D;">
-    <h2>Sign In</h2>
-    <input type="text" id="username" placeholder="Username" style="display: block; margin: 10px auto;">
-    <input type="password" id="pin" placeholder="Parent-Approved PIN" style="display: block; margin: 10px auto;">
-    <button onclick="signIn()">Enter Quest</button>
-    <button onclick="closeSignIn()">Cancel</button>
+  <h1>CryptoKids Academy</h1>
+  <div class="logo-placeholder">🐉 CKA</div>
+  <h2>Your Age</h2>
+  <div class="age-cards">
+    <div class="age-card active" onclick="showPopup()">7–10</div>
+    <div class="age-card coming-soon">11–14<br>Coming Soon</div>
+    <div class="age-card coming-soon">15–17<br>Coming Soon</div>
   </div>
+  <button onclick="showPopup()">Sign Up/Log In</button>
+  <div id="age-popup" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #f0f8ff; padding: 20px; border: 2px solid #15803D;">
+    <p>Join the Dragon’s Treasure Quest! Earn coins, trade treasures, feed dragons, and exchange your crypto rewards!</p>
+    <a href="signup.html" class="signup-link">Sign Up</a>
+    <a href="child-login.html" class="signup-link">Log In</a>
+    <button onclick="closePopup()">Close</button>
+  </div>
+  <footer>2025 CC Academy</footer>
   <script src="script.js"></script>
 </body>
 </html>
