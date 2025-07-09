@@ -17,6 +17,31 @@ function closePopup() {
   if (popup) popup.style.display = 'none';
 }
 
+function signUp() {
+  const email = document.getElementById('parent-email').value;
+  const age = document.getElementById('child-age').value;
+  const nickname = document.getElementById('child-nickname').value;
+  if (!nickname) {
+    alert('Please enter a child nickname!');
+    return;
+  }
+  if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    alert('Please enter a valid email or leave it blank!');
+    return;
+  }
+  const users = JSON.parse(localStorage.getItem('users') || '{}');
+  if (users[nickname]) {
+    alert('Nickname already taken! Choose another.');
+    return;
+  }
+  const pin = Math.floor(1000 + Math.random() * 9000); // Random 4-digit PIN
+  users[nickname] = { pin, email, age, coins: 0.5 };
+  localStorage.setItem('users', JSON.stringify(users));
+  localStorage.setItem('currentUser', nickname);
+  alert(`Your child’s secret dragon key is ${pin}. Save it for login!`);
+  window.location.href = 'index.html';
+}
+
 function feedPet() {
   window.wallet.coins += 0.01;
   updateCoinDisplay();
