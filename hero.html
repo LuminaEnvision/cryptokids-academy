@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to CryptoKids Academy</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>CryptoKids Academy</h1>
+  <div class="logo-placeholder">🐉 CKA</div>
+  <h2>Your Age</h2>
+  <div class="age-cards">
+    <div class="age-card active" onclick="showPopup()">7–10</div>
+    <div class="age-card coming-soon">11–14<br>Coming Soon</div>
+    <div class="age-card coming-soon">15–17<br>Coming Soon</div>
+  </div>
+  <button onclick="showPopup()">Sign Up/Log In</button>
+  <div id="age-popup" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #f0f8ff; padding: 20px; border: 2px solid #15803D;">
+    <p>Join the Dragon’s Treasure Quest! Earn coins, trade treasures, feed dragons, and exchange your crypto rewards!</p>
+    <a href="signup.html" class="signup-link">Sign Up</a>
+    <a href="child-login.html" class="signup-link">Log In</a>
+    <button onclick="closePopup()">Close</button>
+  </div>
+  <footer>2025 CC Academy</footer>
+  <script src="script.js"></script>
+</body>
+</html>
