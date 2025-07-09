@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome to CryptoKids Academy</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Welcome to CryptoKids Academy!</h1>
+  <img src="https://cdn.pixabay.com/photo/2018/05/18/15/30/unicorn-icon-3411682_1280.png" alt="Dragon" class="pet-image">
+  <p id="story">Join the Dragon’s Crypto Quest! Earn coins, trade treasures, and learn blockchain with your dragon!</p>
+  <button onclick="showSignIn()">Start Your Quest</button>
+  <p><a href="signup.html" class="signup-link">New? Sign Up Here!</a></p>
+  <div id="signin-popup" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #f0f8ff; padding: 20px; border: 2px solid #15803D;">
+    <h2>Sign In</h2>
+    <input type="text" id="username" placeholder="Username" style="display: block; margin: 10px auto;">
+    <input type="password" id="pin" placeholder="Parent-Approved PIN" style="display: block; margin: 10px auto;">
+    <button onclick="signIn()">Enter Quest</button>
+    <button onclick="closeSignIn()">Cancel</button>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
