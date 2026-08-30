@@ -1,0 +1,48 @@
+{
+  "name": "KiddoPay",
+  "short_name": "KiddoPay",
+  "description": "A fun kids crypto wallet — learn, save, and send coins safely on Base.",
+  "start_url": "/kids/dashboard",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#EAF7FF",
+  "theme_color": "#1CB0F6",
+  "lang": "en",
+  "categories": ["education", "finance", "games"],
+  "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-512-maskable.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "prefer_related_applications": false,
+  "shortcuts": [
+    {
+      "name": "Home",
+      "short_name": "Home",
+      "url": "/kids/dashboard",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Learn",
+      "short_name": "Learn",
+      "url": "/kids/learn",
+      "icons": [{ "src": "/icons/icon-192.png", "sizes": "192x192" }]
+    }
+  ]
+}

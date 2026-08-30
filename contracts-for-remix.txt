@@ -1,0 +1,194 @@
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
+
+/**
+ * @title MagicToken
+ * @notice A kid-friendly ERC20 token for the Magic Kids Wallet
+ */
+contract MagicToken is ERC20 {
+    constructor() ERC20("Magic Token", "MAGIC") {
+        // Mint 1,000,000 MAGIC tokens to the deployer
+        _mint(msg.sender, 1_000_000 * 10**decimals());
+    }
+}
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.20;
+
+import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
+
+/**
+ * @title MagicStaking
+ * @notice Staking contract for MAGIC tokens with 5% monthly APY
+ * @dev Kids can stake tokens and earn rewards monthly
+ */
+contract MagicStaking is Ownable, ReentrancyGuard {
+    using SafeERC20 for IERC20;
+
+    IERC20 public magicToken;
+    
+    // 5% monthly APY = 0.4167% per month
+    uint256 public constant MONTHLY_APY = 4167; // Basis points (5% / 12 = 0.4167%)
+    uint256 public constant BASIS_POINTS = 10000;
+    uint256 public constant SECONDS_PER_MONTH = 30 * 24 * 60 * 60; // 30 days
+    
+    struct StakingPosition {
+        uint256 amount; // Amount staked
+        uint256 startTime; // When staking started
+        uint256 lastClaimTime; // Last time rewards were claimed
+        uint256 totalEarned; // Total rewards earned
+    }
+    
+    mapping(address => StakingPosition) public positions;
+    mapping(address => bool) public hasStaked;
+    
+    uint256 public totalStaked;
+    uint256 public rewardPool; // Pool of tokens for rewards
+    
+    event Staked(address indexed user, uint256 amount);
+    event Unstaked(address indexed user, uint256 amount);
+    event RewardsClaimed(address indexed user, uint256 amount);
+    event RewardPoolDeposited(uint256 amount);
+    
+    constructor(address _magicTokenAddress) Ownable(msg.sender) {
+        magicToken = IERC20(_magicTokenAddress);
+    }
+    
+    /**
+     * @notice Stake MAGIC tokens
+     */
+    function stake(uint256 amount) external nonReentrant {
+        require(amount > 0, "Amount must be greater than 0");
+        require(magicToken.balanceOf(msg.sender) >= amount, "Insufficient balance");
+        
+        // Transfer tokens from user
+        magicToken.safeTransferFrom(msg.sender, address(this), amount);
+        
+        // Update or create position
+        if (hasStaked[msg.sender]) {
+            // Claim existing rewards first
+            _claimRewards(msg.sender);
+            positions[msg.sender].amount += amount;
+        } else {
+            positions[msg.sender] = StakingPosition({
+                amount: amount,
+                startTime: block.timestamp,
+                lastClaimTime: block.timestamp,
+                totalEarned: 0
+            });
+            hasStaked[msg.sender] = true;
+        }
+        
+        totalStaked += amount;
+        emit Staked(msg.sender, amount);
+    }
+    
+    /**
+     * @notice Unstake tokens
+     */
+    function unstake(uint256 amount) external nonReentrant {
+        require(amount > 0, "Amount must be greater than 0");
+        StakingPosition storage position = positions[msg.sender];
+        require(position.amount >= amount, "Insufficient staked amount");
+        
+        // Claim rewards first
+        _claimRewards(msg.sender);
+        
+        // Update position
+        position.amount -= amount;
+        totalStaked -= amount;
+        
+        // Transfer tokens back to user
+        magicToken.safeTransfer(msg.sender, amount);
+        
+        emit Unstaked(msg.sender, amount);
+    }
+    
+    /**
+     * @notice Claim staking rewards
+     */
+    function claimRewards() external nonReentrant {
+        _claimRewards(msg.sender);
+    }
+    
+    /**
+     * @notice Internal function to claim rewards
+     */
+    function _claimRewards(address user) internal {
+        StakingPosition storage position = positions[user];
+        if (position.amount == 0) return;
+        
+        uint256 rewards = calculateRewards(user);
+        if (rewards == 0) return;
+        
+        require(rewardPool >= rewards, "Insufficient reward pool");
+        
+        position.lastClaimTime = block.timestamp;
+        position.totalEarned += rewards;
+        rewardPool -= rewards;
+        
+        magicToken.safeTransfer(user, rewards);
+        emit RewardsClaimed(user, rewards);
+    }
+    
+    /**
+     * @notice Calculate pending rewards for a user
+     */
+    function calculateRewards(address user) public view returns (uint256) {
+        StakingPosition memory position = positions[user];
+        if (position.amount == 0) return 0;
+        
+        uint256 timeElapsed = block.timestamp - position.lastClaimTime;
+        uint256 monthsElapsed = timeElapsed / SECONDS_PER_MONTH;
+        
+        if (monthsElapsed == 0) return 0;
+        
+        // Calculate: amount * (monthly_apy / basis_points) * months_elapsed
+        uint256 monthlyReward = (position.amount * MONTHLY_APY) / BASIS_POINTS;
+        return monthlyReward * monthsElapsed;
+    }
+    
+    /**
+     * @notice Get user's staking position
+     */
+    function getPosition(address user) external view returns (
+        uint256 amount,
+        uint256 startTime,
+        uint256 lastClaimTime,
+        uint256 totalEarned,
+        uint256 pendingRewards
+    ) {
+        StakingPosition memory position = positions[user];
+        return (
+            position.amount,
+            position.startTime,
+            position.lastClaimTime,
+            position.totalEarned,
+            calculateRewards(user)
+        );
+    }
+    
+    /**
+     * @notice Owner can deposit tokens to reward pool
+     */
+    function depositRewardPool(uint256 amount) external onlyOwner {
+        magicToken.safeTransferFrom(msg.sender, address(this), amount);
+        rewardPool += amount;
+        emit RewardPoolDeposited(amount);
+    }
+    
+    /**
+     * @notice Owner can withdraw excess tokens (emergency only)
+     */
+    function withdrawExcess(uint256 amount) external onlyOwner {
+        uint256 available = magicToken.balanceOf(address(this)) - totalStaked - rewardPool;
+        require(available >= amount, "Insufficient excess tokens");
+        magicToken.safeTransfer(owner(), amount);
+    }
+}
+

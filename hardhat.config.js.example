@@ -1,0 +1,33 @@
+/**
+ * Hardhat Configuration Example
+ * Copy this to hardhat.config.js and update with your settings
+ */
+
+require("@nomicfoundation/hardhat-toolbox");
+
+/** @type import('hardhat/config').HardhatUserConfig */
+module.exports = {
+  solidity: {
+    version: "0.8.20",
+    settings: {
+      optimizer: {
+        enabled: true,
+        runs: 200,
+      },
+    },
+  },
+  networks: {
+    baseSepolia: {
+      url: process.env.NEXT_PUBLIC_BASE_SEPOLIA_RPC || "https://sepolia.base.org",
+      accounts: process.env.PRIVATE_KEY ? [process.env.PRIVATE_KEY] : [],
+      chainId: 84532,
+    },
+  },
+  paths: {
+    sources: "./contracts",
+    tests: "./test",
+    cache: "./cache",
+    artifacts: "./artifacts",
+  },
+};
+

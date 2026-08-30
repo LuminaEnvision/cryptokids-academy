@@ -1,0 +1,41 @@
+{
+  "name": "magic-kids-wallet",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "sync:lilnouns": "node scripts/sync-lilnouns-assets.mjs --github"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.0.0",
+    "crypto-js": "^4.2.0",
+    "framer-motion": "^11.0.0",
+    "iconoir-react": "^7.11.0",
+    "next": "^15.0.0",
+    "qrcode.react": "^3.1.0",
+    "react": "^18.3.0",
+    "react-dom": "^18.3.0",
+    "viem": "^2.0.0",
+    "wagmi": "^2.0.0",
+    "zustand": "^5.0.9"
+  },
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^6.1.0",
+    "@openzeppelin/contracts": "^5.4.0",
+    "@types/crypto-js": "^4.2.0",
+    "@types/node": "^20.0.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "autoprefixer": "^10.4.0",
+    "dotenv": "^17.2.3",
+    "eslint": "^8.0.0",
+    "eslint-config-next": "^15.0.0",
+    "hardhat": "^3.0.17",
+    "postcss": "^8.4.0",
+    "tailwindcss": "^3.4.0",
+    "typescript": "^5.0.0"
+  }
+}
